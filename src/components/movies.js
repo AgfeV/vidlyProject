@@ -1,11 +1,14 @@
 import React, {Component} from "react";
 import Like from "./common/like";
-
+import Pagination from "./common/pagination"
+import NavBar from "./navbar"
 import {getMovies} from "../services/fakeMovieService";
 
 class Movies extends Component {
   state = {
-    movies:getMovies()
+    movies:getMovies(),
+    pageSize:4,
+    currentPage: 1
   };
 
   //take the current movie title, movie and filter out the movie in a new
@@ -16,7 +19,7 @@ class Movies extends Component {
     this.setState({movies})
     console.log('Event Handler Delete Called', movie)
   };
-  
+
   handleLiked = movie => {
     const movies =  [...this.state.movies];
     const index = movies.indexOf(movie);
@@ -25,13 +28,18 @@ class Movies extends Component {
     this.setState({movies});
 
   }
+  handlePageChange = page => {
+    //Update the state
+    this.setState({currentPage:page})
+  }
 
   render() {
-
+const {pageSize , currentPage} = this.state;
     //Note: By using the this.state.movies.map we create a new row in the table and then access that specfic set of data.
     //The onclick will call the handle delete function with the current movie title to be deleted
     return(
       <React.Fragment>
+        <NavBar/>
       <div>
         There are {this.state.movies.length} available
       </div>
@@ -60,6 +68,12 @@ class Movies extends Component {
     ))}
     </tbody>
   </table>
+  <Pagination
+    itemsCount={this.state.movies.length}
+    pageSize={pageSize}
+    currentPage={currentPage}
+    onPageChange={this.handlePageChange}
+    />
   </React.Fragment>
 );
   }
