@@ -3,6 +3,7 @@ import Like from "./common/like";
 import Pagination from "./common/pagination"
 import NavBar from "./navbar"
 import {getMovies} from "../services/fakeMovieService";
+import {paginate} from "../utils/paginate"
 
 class Movies extends Component {
   state = {
@@ -34,7 +35,8 @@ class Movies extends Component {
   }
 
   render() {
-const {pageSize , currentPage} = this.state;
+    const {pageSize , currentPage} = this.state;
+    const movies = paginate(this.state.movies,currentPage,pageSize )
     //Note: By using the this.state.movies.map we create a new row in the table and then access that specfic set of data.
     //The onclick will call the handle delete function with the current movie title to be deleted
     return(
@@ -54,7 +56,7 @@ const {pageSize , currentPage} = this.state;
       </tr>
     </thead>
     <tbody>
-    {this.state.movies.map(movie => (
+    {movies.map(movie => (
       <tr key={movie._id} >
         <td>{movie.title}</td>
         <td>{movie.genre.name}</td>
