@@ -11,14 +11,16 @@ import {paginate} from "../utils/paginate"
 class Movies extends Component {
   state = {
     movies:[],
-    generes:[],
+    genres:[],
     pageSize:4,
     currentPage: 1
   };
 
   //Really built for a server call/DB
   componentDidMount(){
-    this.setState({movies: getMovies(), generes: getGenres()});
+    //in order to create a all generes button when first mounting go ahead and create a genres object
+    const genres = [{name:'All Genres'}, ...getGenres()]
+    this.setState({movies: getMovies(), genres});
   }
   //take the current movie title, movie and filter out the movie in a new
   //movies object that will be the updated state
@@ -43,20 +45,23 @@ class Movies extends Component {
   }
 
   handleGenreSelect = (genre) =>{
-    this.setState({currentGenre: genre})
+    //we want to reset the page back to one when switching because for new selected genre the that #of pages may not exist.
+    this.setState({currentGenre: genre, currentPage:1 })
   }
   render() {
-    const {pageSize , currentPage} = this.state;
-    const movies = paginate(this.state.movies,currentPage,pageSize )
+    const {pageSize , currentPage, movies:allMovies, currentGenre} = this.state;
+
+    //Filter out the movies by the selected genere
+    const filtered = currentGenre && currentGenre._id
+     ? allMovies.filter(m => m.genre._id === currentGenre._id) : allMovies;
+    const movies = paginate(filtered, currentPage, pageSize )
     //Note: By using the this.state.movies.map we create a new row in the table and then access that specfic set of data.
     //The onclick will call the handle delete function with the current movie title to be deleted
     return(
       <div className = "row">
-
-
         <div className="col-3">
           <ListGroup
-            items={this.state.generes}
+            items={this.state.genres}
             selectedItem = {this.state.currentGenre}
             onItemSelect={this.handleGenreSelect}
             />
@@ -64,7 +69,7 @@ class Movies extends Component {
 
 
         <div className="col">
-          <div>There are {this.state.movies.length} available</div>
+          <div>There are {filtered.length} available</div>
 
           <table class="table">
         <thead>
@@ -92,7 +97,7 @@ class Movies extends Component {
         </tbody>
       </table>
       <Pagination
-        itemsCount={this.state.movies.length}
+        itemsCount={filtered.length}
         pageSize={pageSize}
         currentPage={currentPage}
         onPageChange={this.handlePageChange}
