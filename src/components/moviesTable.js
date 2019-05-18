@@ -1,35 +1,31 @@
 import React, {Component} from 'react';
 import Like from "./common/like";
-
+import TableHeader from "./common/tableHeader";
 
 class MoviesTable extends Component {
-  raiseSort = path =>{
-    //will take all the sorting logic
-    const sortColumn = {...this.props.sortColumn};
+//we are going to create an object to send down to the table header class with all the path and lable information
+columns = [
 
-    if(sortColumn.path === path)
-      sortColumn.order = (sortColumn.order === 'asc') ? 'desc': 'asc';
-    else {
-      sortColumn.path = path;
-      sortColumn.order = 'asc';
-    }
-    //now we need to send the new sort colum objcet back to the handler in movies
-    this.props.onSort(sortColumn);
-  }
+  {path:'title', label: 'Title'},
+  {path:'genre.name', label: 'Genre'},
+  {path:'numberInStock', label: 'Stock'},
+  {path:'dailyRentalRate', label: 'Rate'},
+  //will represent the like and the delete button but dont have a label or path for sorting
+  {key:'like'},
+  {key:'delete'}
+
+]
 
   render() {
-    const {movies,onDelete,onLike} = this.props;
+    const {movies,onDelete,onLike, sortColumn, onSort} = this.props;
     return (
       <table class="table">
-        <thead>
-          <tr>
-            <th onClick={() => this.raiseSort('title')} scope="col">Title</th>
-            <th onClick={() => this.raiseSort('genre.name')} scope="col">Genre</th>
-            <th onClick={() => this.raiseSort('numberInStock')} scope="col">Action</th>
-            <th onClick={() => this.raiseSort('dailyRentalRate') } scope="col">Rate</th>
-            <th scope="col">Heart</th>
-          </tr>
-        </thead>
+        <TableHeader
+          columns={this.columns}
+          sortColumn={sortColumn}
+          onSort={onSort}
+          />
+
         <tbody>
           {movies.map(movie => (
             <tr key={movie._id} >
@@ -44,6 +40,8 @@ class MoviesTable extends Component {
             </tr>
           ))}
         </tbody>
+
+        
       </table>
     );}
 }
