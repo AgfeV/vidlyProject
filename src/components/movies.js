@@ -57,9 +57,10 @@ class Movies extends Component {
     //this handler
     this.setState({sortColumn});
   }
-  render() {
-    const {pageSize , currentPage, movies:allMovies, currentGenre , sortColumn} = this.state;
 
+  getPagedData = () =>
+  {
+    const {pageSize , currentPage, movies:allMovies, currentGenre , sortColumn} = this.state;
     //Filter out the movies by the selected genere
     const filtered = currentGenre && currentGenre._id
      ? allMovies.filter(m => m.genre._id === currentGenre._id) : allMovies;
@@ -67,6 +68,15 @@ class Movies extends Component {
      //Now we sort the data
     const sorted = _.orderBy(filtered,[sortColumn.path], [sortColumn.order]);
     const movies = paginate(sorted, currentPage, pageSize )
+
+    return {totalCount: filtered.length , data:movies};
+
+  }
+  
+  render() {
+    const {pageSize , currentPage, movies:allMovies, currentGenre , sortColumn} = this.state;
+
+    const {totalCount , data:movies} = this.getPagedData();
     //Note: By using the this.state.movies.map we create a new row in the table and then access that specfic set of data.
     //The onclick will call the handle delete function with the current movie title to be deleted
 
@@ -81,7 +91,7 @@ class Movies extends Component {
             />
         </div>
         <div className="col">
-          <div>There are {filtered.length} available</div>
+          <div>There are {totalCount} available</div>
           <MoviesTable
             movies={movies}
             sortColumn={sortColumn}
@@ -90,7 +100,7 @@ class Movies extends Component {
             onSort={this.handleSort}
             />
           <Pagination
-            itemsCount={filtered.length}
+            itemsCount={totalCount}
             pageSize={pageSize}
             currentPage={currentPage}
             onPageChange={this.handlePageChange}
