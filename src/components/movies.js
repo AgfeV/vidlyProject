@@ -72,7 +72,7 @@ class Movies extends Component {
     return {totalCount: filtered.length , data:movies};
 
   }
-  
+
   render() {
     const {pageSize , currentPage, movies:allMovies, currentGenre , sortColumn} = this.state;
 
@@ -81,34 +81,36 @@ class Movies extends Component {
     //The onclick will call the handle delete function with the current movie title to be deleted
 
     return(
-      <div className = "row">
+      <React.Fragment>
+        <div className ="container">
+        <div className = "row">
+          <div className="col-3">
+            <ListGroup
+              items={this.state.genres}
+              selectedItem = {this.state.currentGenre}
+              onItemSelect={this.handleGenreSelect}
+              />
+          </div>
+          <div className="col">
+            <div>There are {totalCount} available</div>
+            <MoviesTable
+              movies={movies}
+              sortColumn={sortColumn}
+              onLike={this.handleLiked}
+              onDelete={this.handleDelete}
+              onSort={this.handleSort}
+              />
+            <Pagination
+              itemsCount={totalCount}
+              pageSize={pageSize}
+              currentPage={currentPage}
+              onPageChange={this.handlePageChange}
+              />
+          </div>
 
-        <div className="col-3">
-          <ListGroup
-            items={this.state.genres}
-            selectedItem = {this.state.currentGenre}
-            onItemSelect={this.handleGenreSelect}
-            />
         </div>
-        <div className="col">
-          <div>There are {totalCount} available</div>
-          <MoviesTable
-            movies={movies}
-            sortColumn={sortColumn}
-            onLike={this.handleLiked}
-            onDelete={this.handleDelete}
-            onSort={this.handleSort}
-            />
-          <Pagination
-            itemsCount={totalCount}
-            pageSize={pageSize}
-            currentPage={currentPage}
-            onPageChange={this.handlePageChange}
-            />
-        </div>
-
       </div>
-
+      </React.Fragment>
 
 );
   }

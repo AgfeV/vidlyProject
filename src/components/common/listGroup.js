@@ -1,7 +1,7 @@
 import React from 'react';
 
 //Creating funcitonal component
-const ListGroup = (items, textProperty, valueProperty, onItemSelect, selectedItem) => {
+const ListGroup = ({items, textProperty, valueProperty, onItemSelect, selectedItem}) => {
     return(
       <ul class="list-group">
       {items.map(item=> <li
