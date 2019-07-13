@@ -8,14 +8,17 @@ import Rentals from './components/rentals';
 import NotFound from './components/notFound';
 import MovieForm from './components/movieform';
 import LoginForm from './components/loginForm';
+import RegisterForm from './components/registerForm';
 
 class App extends Component {
   render() {
+    //Determines the routing to all the diffrent pages.
     return (
       <div>
         <NavBar/>
         <div className ="content">
           <Switch>
+            <Route path="/register" component={RegisterForm}/>
             <Route path="/login" component={LoginForm}/>
             <Route path="/movies/:id" component={MovieForm}/>
             <Route path="/movies" component={Movies}/>

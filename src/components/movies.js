@@ -35,6 +35,9 @@ class Movies extends Component {
   };
 
   handleLiked = movie => {
+    //Since we cant manage the state directly, we must
+    //First copy the movies object find the index of the liked movie and
+    //then switch the liked status and then set the state with the new copy
     const movies =  [...this.state.movies];
     const index = movies.indexOf(movie);
     movies[index] = {...movies[index]};

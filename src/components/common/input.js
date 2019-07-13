@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Input = ({value,onChange,name, label,error}) =>{
+const Input = ({value,onChange,name, label,error,type}) =>{
   //if error is truthy then render the error via conditional rendering
   return(
     <div className="form-group">
@@ -10,7 +10,7 @@ const Input = ({value,onChange,name, label,error}) =>{
         onChange={onChange}
         name={name}
         id={name}
-        type="text"
+        type={type}
         className="form-control"
         />
       {error &&  <div className="alert alert-danger">{error}</div>}
